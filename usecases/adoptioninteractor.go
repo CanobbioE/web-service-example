@@ -2,14 +2,6 @@ package usecases
 
 import "github.com/CanobbioE/web-service-example/domain"
 
-// Animal represents an Animal as a use case's level entity.
-// To avoid leaking the domain's level entity "Animal"
-// we have to redefine it here.
-type Animal struct {
-	ID     int
-	Specie string
-}
-
 // Logger is used for logging. Using an interface allows
 // us to hook up anything as a logger.
 type Logger interface {
@@ -43,7 +35,7 @@ func (ai *AdoptionInteractor) Adopt(userID, animalID int) error {
 		Animal:  animal,
 	}
 
-	err := ai.AdoptionRepository.Store(adoption)
+	err = ai.AdoptionRepository.Store(adoption)
 	if err != nil {
 		return err
 	}
@@ -53,8 +45,8 @@ func (ai *AdoptionInteractor) Adopt(userID, animalID int) error {
 
 // AdoptedAnimals lists all the animals that have been adopted
 // by the specified user.
-func (ai *AdoptionInteractor) AdoptedAnimals(userID int) ([]Animal, error) {
-	var animals []Animal
+func (ai *AdoptionInteractor) AdoptedAnimals(userID int) ([]domain.Animal, error) {
+	var animals []domain.Animal
 
 	user, err := ai.UserRepository.FindByID(userID)
 	if err != nil {
@@ -74,7 +66,7 @@ func (ai *AdoptionInteractor) AdoptedAnimals(userID int) ([]Animal, error) {
 }
 
 // AdoptableAnimals lists all the animals that can be adopted.
-func (ai *AdoptionInteractor) AdoptableAnimals() (animals []Animals, err error) {
+func (ai *AdoptionInteractor) AdoptableAnimals() (animals []domain.Animal, err error) {
 	animals, err = ai.AnimalRepository.FindAll()
 	if err != nil {
 		return

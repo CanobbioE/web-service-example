@@ -10,6 +10,6 @@ type Animal struct {
 // the animals persistency container.
 type AnimalRepository interface {
 	Store(animal Animal) error
-	FindById(id int) (Animal, error)
+	FindByID(id int) (Animal, error)
 	FindAll() ([]Animal, error)
 }

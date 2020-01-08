@@ -10,5 +10,5 @@ type Adopter struct {
 // the adopters persistency container
 type AdopterRepository interface {
 	Store(user Adopter) error
-	FindById(id int) (Adopter, error)
+	FindByID(id int) (Adopter, error)
 }

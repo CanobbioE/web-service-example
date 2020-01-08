@@ -5,7 +5,7 @@ import "github.com/CanobbioE/web-service-example/domain"
 // UserRepository provides an interface for the users persistency container.
 type UserRepository interface {
 	Store(user User) error
-	FindById(id int) (User, error)
+	FindByID(id int) (User, error)
 }
 
 // User represents a use case's level entity.

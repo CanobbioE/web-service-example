@@ -12,6 +12,6 @@ type Adoption struct {
 // the adoptions persistency container.
 type AdoptionRepository interface {
 	Store(adoption Adoption) error
-	FindById(id int) (Adoption, error)
+	FindByID(id int) (Adoption, error)
 	FindAllByAdopterID(id int) ([]Adoption, error)
 }
