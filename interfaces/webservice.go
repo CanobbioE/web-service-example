@@ -12,8 +12,8 @@ import (
 // Using an interface here allows to change implementation
 // as needed, for example mocking it during testing.
 type AdoptionInteractor interface {
-	Adopt(userID, animalID int) error
 	AdoptedAnimals(userID int) ([]domain.Animal, error)
+	Adopt(userID, animalID int) error
 	AdoptableAnimals() ([]domain.Animal, error)
 }
 
