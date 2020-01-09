@@ -1,6 +1,10 @@
 package usecases
 
-import "github.com/CanobbioE/web-service-example/domain"
+import (
+	"fmt"
+
+	"github.com/CanobbioE/web-service-example/domain"
+)
 
 // Logger is used for logging. Using an interface allows
 // us to hook up anything as a logger.
@@ -22,11 +26,13 @@ type AdoptionInteractor struct {
 func (ai AdoptionInteractor) Adopt(userID, animalID int) error {
 	animal, err := ai.AnimalRepository.FindByID(animalID)
 	if err != nil {
+		ai.Logger.Log(err.Error())
 		return err
 	}
 
 	user, err := ai.UserRepository.FindByID(userID)
 	if err != nil {
+		ai.Logger.Log(err.Error())
 		return err
 	}
 
@@ -37,8 +43,11 @@ func (ai AdoptionInteractor) Adopt(userID, animalID int) error {
 
 	err = ai.AdoptionRepository.Store(adoption)
 	if err != nil {
+		ai.Logger.Log(err.Error())
 		return err
 	}
+
+	ai.Logger.Log(fmt.Sprintf("User %d has adopted animal %d", userID, animalID))
 
 	return nil
 }
@@ -50,17 +59,21 @@ func (ai AdoptionInteractor) AdoptedAnimals(userID int) ([]domain.Animal, error)
 
 	user, err := ai.UserRepository.FindByID(userID)
 	if err != nil {
+		ai.Logger.Log(err.Error())
 		return animals, err
 	}
 
 	adoptions, err := ai.AdoptionRepository.FindAllByAdopterID(user.Adopter.ID)
 	if err != nil {
+		ai.Logger.Log(err.Error())
 		return animals, err
 	}
 
 	for _, adoption := range adoptions {
 		animals = append(animals, adoption.Animal)
 	}
+
+	ai.Logger.Log(fmt.Sprintf("Listed all adopted animals for user %d", userID))
 
 	return animals, nil
 }
@@ -69,7 +82,10 @@ func (ai AdoptionInteractor) AdoptedAnimals(userID int) ([]domain.Animal, error)
 func (ai AdoptionInteractor) AdoptableAnimals() (animals []domain.Animal, err error) {
 	animals, err = ai.AnimalRepository.FindAll()
 	if err != nil {
+		ai.Logger.Log(err.Error())
 		return
 	}
+
+	ai.Logger.Log(`Listed all adoptable animals`)
 	return animals, nil
 }
