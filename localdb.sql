@@ -26,5 +26,8 @@ INSERT INTO animals (id, specie, adoptable) VALUES (1, "cat", "false");
 INSERT INTO animals (id, specie, adoptable) VALUES (2, "dog", "false");
 INSERT INTO animals (id, specie, adoptable) VALUES (3, "crocodile", "true");
 INSERT INTO animals (id, specie, adoptable) VALUES (4, "kangaroo", "true");
+INSERT INTO animals (id, specie, adoptable) VALUES (5, "giraffe", "true");
+INSERT INTO animals (id, specie, adoptable) VALUES (6, "human", "true");
+INSERT INTO animals (id, specie, adoptable) VALUES (7, "fish", "true");
 
 INSERT INTO users (id, adopter_id) VALUES (1, 1);

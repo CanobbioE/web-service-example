@@ -37,7 +37,7 @@ func (ai AdoptionInteractor) Adopt(userID, animalID int) error {
 	}
 
 	if !animal.IsAdoptable {
-		err := fmt.Errorf("tried to adopt not available animal, id: %d", animalID)
+		err := fmt.Errorf("tried to adopt unavailable animal, id: %d", animalID)
 		ai.Logger.Log(err.Error())
 		return err
 	}
@@ -47,6 +47,7 @@ func (ai AdoptionInteractor) Adopt(userID, animalID int) error {
 		ai.Logger.Log(err.Error())
 		return err
 	}
+
 	adoption := domain.Adoption{
 		ID:      maxID + 1,
 		Adopter: user.Adopter,

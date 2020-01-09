@@ -36,6 +36,7 @@ func (db *DbAnimalRepo) FindByID(id int) (domain.Animal, error) {
 	}
 
 	var specie, adoptable string
+	row.Next()
 	err = row.Scan(&specie, &adoptable)
 	if err != nil {
 		return animal, fmt.Errorf("can't find animal with id %d:\n\t%v", id, err)
@@ -63,7 +64,12 @@ func (db *DbAnimalRepo) FindAllAdoptable() ([]domain.Animal, error) {
 		var id int
 		var specie string
 		row.Scan(&id, &specie)
-		animals = append(animals, domain.Animal{id, specie, true})
+		animal := domain.Animal{
+			ID:          id,
+			Specie:      specie,
+			IsAdoptable: true,
+		}
+		animals = append(animals, animal)
 	}
 	return animals, nil
 }

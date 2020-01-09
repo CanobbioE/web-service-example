@@ -48,10 +48,11 @@ func (db *DbAdoptionRepo) FindByID(id int) (domain.Adoption, error) {
 	if err != nil {
 		return adoption, fmt.Errorf("can't find adoption with id %d:\n\t%v", id, err)
 	}
-
-	adoption.Adopter = adopter
-	adoption.Animal = animal
-	adoption.ID = id
+	adoption = domain.Adoption{
+		Adopter: adopter,
+		Animal:  animal,
+		ID:      id,
+	}
 
 	return adoption, nil
 }
@@ -92,6 +93,7 @@ func (db *DbAdoptionRepo) FindMaxID() (id int, err error) {
 		return
 	}
 
+	row.Next()
 	err = row.Scan(&id)
 	if err != nil {
 		return

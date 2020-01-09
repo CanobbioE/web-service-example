@@ -20,6 +20,8 @@ func NewSqliteHandler(fileName string) (*SqliteHandler, error) {
 	if err != nil {
 		return nil, err
 	}
+	conn.SetMaxOpenConns(1)
+	conn.SetConnMaxLifetime(5)
 	return &SqliteHandler{conn}, nil
 }
 
@@ -56,8 +58,8 @@ type SqliteRow struct {
 // and discards the rest.
 // If no row matches the query, Scan returns ErrNoRows.
 func (r SqliteRow) Scan(dest ...interface{}) error {
-	r.Rows.Next()
-	return r.Rows.Scan(dest...)
+	r.Rows.Scan(dest...)
+	return nil
 }
 
 // Next prepares the next result row for reading with the Scan method.

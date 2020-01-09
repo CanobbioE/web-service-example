@@ -39,6 +39,7 @@ func (db *DbUserRepo) FindByID(id int) (usecases.User, error) {
 	}
 
 	var adopterID int
+	row.Next()
 	err = row.Scan(&adopterID)
 	if err != nil {
 		return user, fmt.Errorf("can't find user with id %d:\n\t%v", id, err)
