@@ -1,0 +1,6 @@
+curl -o adoptable.json "localhost:8080/adoptable"
+
+curl -o adopted.json "localhost:8080/adoptions?user=1"
+
+curl -X "localhost:8080/adopt?user=1&animal=6"
+
