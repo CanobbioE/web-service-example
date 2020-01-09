@@ -11,6 +11,7 @@ type DbHandler interface {
 type Row interface {
 	Scan(dest ...interface{}) error
 	Next() bool
+	Close() error
 }
 
 // DbRepo represents a general repository.

@@ -33,10 +33,12 @@ func (db *DbUserRepo) FindByID(id int) (usecases.User, error) {
 	var user usecases.User
 
 	q := fmt.Sprintf("SELECT adopter_id FROM users WHERE id = %d", id)
+
 	row, err := db.dbHandler.Query(q)
 	if err != nil {
 		return user, fmt.Errorf("can't find user with id %d:\n\t%v", id, err)
 	}
+	defer row.Close()
 
 	var adopterID int
 	row.Next()

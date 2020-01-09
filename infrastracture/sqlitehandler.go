@@ -20,8 +20,6 @@ func NewSqliteHandler(fileName string) (*SqliteHandler, error) {
 	if err != nil {
 		return nil, err
 	}
-	conn.SetMaxOpenConns(1)
-	conn.SetConnMaxLifetime(5)
 	return &SqliteHandler{conn}, nil
 }
 
@@ -68,4 +66,12 @@ func (r SqliteRow) Scan(dest ...interface{}) error {
 // Err should be consulted to distinguish between the two cases.
 func (r SqliteRow) Next() bool {
 	return r.Rows.Next()
+}
+
+// Close closes the Rows, preventing further enumeration.
+// If Next is called and returns false and there are no further result sets,
+// the Rows are closed automatically and it will suffice to check the result of Err.
+// Close is idempotent and does not affect the result of Err.
+func (r SqliteRow) Close() error {
+	return r.Rows.Close()
 }

@@ -28,12 +28,14 @@ func (db *DbAnimalRepo) Store(animal domain.Animal) error {
 // FindByID retrieves an animals given its ID.
 func (db *DbAnimalRepo) FindByID(id int) (domain.Animal, error) {
 	var animal domain.Animal
+
 	q := fmt.Sprintf("SELECT specie, adoptable FROM animals WHERE id = %d", id)
 
 	row, err := db.dbHandler.Query(q)
 	if err != nil {
 		return animal, fmt.Errorf("can't find animal with id %d:\n\t%v", id, err)
 	}
+	defer row.Close()
 
 	var specie, adoptable string
 	row.Next()
@@ -54,12 +56,15 @@ func (db *DbAnimalRepo) FindByID(id int) (domain.Animal, error) {
 // FindAllAdoptable returns a list of all the animals in the repository.
 func (db *DbAnimalRepo) FindAllAdoptable() ([]domain.Animal, error) {
 	var animals []domain.Animal
+
 	q := `SELECT id, specie FROM animals WHERE adoptable = "true"`
 
 	row, err := db.dbHandler.Query(q)
 	if err != nil {
 		return animals, fmt.Errorf("can't find all animals: %v", err)
 	}
+	defer row.Close()
+
 	for row.Next() {
 		var id int
 		var specie string

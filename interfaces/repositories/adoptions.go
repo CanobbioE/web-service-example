@@ -27,11 +27,14 @@ func (db *DbAdoptionRepo) Store(adoption domain.Adoption) error {
 // FindByID retrieves an adoptions given its ID
 func (db *DbAdoptionRepo) FindByID(id int) (domain.Adoption, error) {
 	var adoption domain.Adoption
+
 	q := fmt.Sprintf("SELECT adopter_id, animal_id FROM adoptions WHERE id = %d", id)
+
 	row, err := db.dbHandler.Query(q)
 	if err != nil {
 		return adoption, fmt.Errorf("can't find adoption with id %d:\n\t%v", id, err)
 	}
+	defer row.Close()
 
 	var adopterID, animalID int
 	err = row.Scan(&adopterID, &animalID)
@@ -68,6 +71,7 @@ func (db *DbAdoptionRepo) FindAllByAdopterID(id int) ([]domain.Adoption, error) 
 	if err != nil {
 		return adoptions, fmt.Errorf("can't create list of adoptions for adopters %d:\n\t%v", id, err)
 	}
+	defer row.Close()
 
 	for row.Next() {
 		var adoptionID int
@@ -88,10 +92,12 @@ func (db *DbAdoptionRepo) FindAllByAdopterID(id int) ([]domain.Adoption, error) 
 // to run as a demo.
 func (db *DbAdoptionRepo) FindMaxID() (id int, err error) {
 	q := `SELECT MAX(id) FROM adoptions`
+
 	row, err := db.dbHandler.Query(q)
 	if err != nil {
 		return
 	}
+	defer row.Close()
 
 	row.Next()
 	err = row.Scan(&id)
