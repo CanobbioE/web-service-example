@@ -13,6 +13,16 @@ type SqliteHandler struct {
 	Conn *sql.DB
 }
 
+// NewSqliteHandler istannciate a new connection to the sqlite db.
+// A filepath to the database file name must be supplied.
+func NewSqliteHandler(fileName string) (*SqliteHandler, error) {
+	conn, err := sql.Open("sqlite3", fileName)
+	if err != nil {
+		return nil, err
+	}
+	return &SqliteHandler{conn}, nil
+}
+
 // Execute performs the given statement on the database
 // the handler is connected to.
 func (sh *SqliteHandler) Execute(statement string) error {
@@ -23,14 +33,12 @@ func (sh *SqliteHandler) Execute(statement string) error {
 // Query performs the given statement on the database
 // the handler is connected to and returns the result.
 func (sh *SqliteHandler) Query(statement string) (repositories.Row, error) {
-	var result SqliteRow
 	rows, err := sh.Conn.Query(statement)
 	if err != nil {
-		return result, err
+		return nil, err
 	}
 
-	result.Rows = rows
-	return result, nil
+	return SqliteRow{rows}, nil
 }
 
 // SqliteRow wraps sql results
@@ -48,7 +56,8 @@ type SqliteRow struct {
 // and discards the rest.
 // If no row matches the query, Scan returns ErrNoRows.
 func (r SqliteRow) Scan(dest ...interface{}) error {
-	return r.Rows.Scan(dest)
+	r.Rows.Next()
+	return r.Rows.Scan(dest...)
 }
 
 // Next prepares the next result row for reading with the Scan method.
@@ -57,14 +66,4 @@ func (r SqliteRow) Scan(dest ...interface{}) error {
 // Err should be consulted to distinguish between the two cases.
 func (r SqliteRow) Next() bool {
 	return r.Rows.Next()
-}
-
-// NewSqliteHandler istannciate a new connection to the sqlite db.
-// A filepath to the database file name must be supplied.
-func NewSqliteHandler(fileName string) (*SqliteHandler, error) {
-	conn, err := sql.Open("sqlite3", fileName)
-	if err != nil {
-		return nil, err
-	}
-	return &SqliteHandler{conn}, nil
 }

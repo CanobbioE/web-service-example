@@ -36,7 +36,19 @@ func (ai AdoptionInteractor) Adopt(userID, animalID int) error {
 		return err
 	}
 
+	if !animal.IsAdoptable {
+		err := fmt.Errorf("tried to adopt not available animal, id: %d", animalID)
+		ai.Logger.Log(err.Error())
+		return err
+	}
+
+	maxID, err := ai.AdoptionRepository.FindMaxID()
+	if err != nil {
+		ai.Logger.Log(err.Error())
+		return err
+	}
 	adoption := domain.Adoption{
+		ID:      maxID + 1,
 		Adopter: user.Adopter,
 		Animal:  animal,
 	}
@@ -80,7 +92,7 @@ func (ai AdoptionInteractor) AdoptedAnimals(userID int) ([]domain.Animal, error)
 
 // AdoptableAnimals lists all the animals that can be adopted.
 func (ai AdoptionInteractor) AdoptableAnimals() (animals []domain.Animal, err error) {
-	animals, err = ai.AnimalRepository.FindAll()
+	animals, err = ai.AnimalRepository.FindAllAdoptable()
 	if err != nil {
 		ai.Logger.Log(err.Error())
 		return

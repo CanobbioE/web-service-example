@@ -22,4 +22,4 @@ type DbRepo struct {
 }
 
 // All is a list of all the repository names
-var All = [...]string{"DbUserRepo", "DbAdoptersRepo", "DbAdoptionsRepo", "DbAnimalsRepo"}
+var All = [...]string{"DbUserRepo", "DbAnimalRepo", "DbAdoptionRepo", "DbAdopterRepo"}

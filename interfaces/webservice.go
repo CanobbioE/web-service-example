@@ -2,6 +2,7 @@ package interfaces
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -28,13 +29,13 @@ type WebserviceHandler struct {
 func (wh WebserviceHandler) AdoptAnimal(w http.ResponseWriter, r *http.Request) {
 	userID, err := strconv.Atoi(r.URL.Query().Get("user"))
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		http.Error(w, fmt.Sprintf("\n%v, %v", err, r.URL.Query()), http.StatusBadRequest)
 		return
 	}
 
 	animalID, err := strconv.Atoi(r.URL.Query().Get("animal"))
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		http.Error(w, fmt.Sprintf("\n%v, %v", err, r.URL.Query()), http.StatusBadRequest)
 		return
 	}
 

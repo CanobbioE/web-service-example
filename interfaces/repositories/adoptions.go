@@ -81,3 +81,21 @@ func (db *DbAdoptionRepo) FindAllByAdopterID(id int) ([]domain.Adoption, error) 
 
 	return adoptions, nil
 }
+
+// FindMaxID retrieves the last inserted ID.
+// This is a bad practice, we are using it here just to enable the project
+// to run as a demo.
+func (db *DbAdoptionRepo) FindMaxID() (id int, err error) {
+	q := `SELECT MAX(id) FROM adoptions`
+	row, err := db.dbHandler.Query(q)
+	if err != nil {
+		return
+	}
+
+	err = row.Scan(&id)
+	if err != nil {
+		return
+	}
+
+	return id, nil
+}

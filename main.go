@@ -4,14 +4,14 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/CanobbioE/web-service-example/infrastracture"
+	infrastructure "github.com/CanobbioE/web-service-example/infrastracture"
 	"github.com/CanobbioE/web-service-example/interfaces"
 	"github.com/CanobbioE/web-service-example/interfaces/repositories"
 	"github.com/CanobbioE/web-service-example/usecases"
 )
 
 func main() {
-	dbHandler, err := infrastructure.NewSqliteHandler("")
+	dbHandler, err := infrastructure.NewSqliteHandler("./localdb.db")
 	if err != nil {
 		panic(err)
 	}
@@ -39,5 +39,4 @@ func main() {
 	http.HandleFunc("/adoptable", webserviceHandler.ShowAnimals)
 
 	http.ListenAndServe(":8080", nil)
-
 }

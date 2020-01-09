@@ -14,4 +14,5 @@ type AdoptionRepository interface {
 	Store(adoption Adoption) error
 	FindByID(id int) (Adoption, error)
 	FindAllByAdopterID(id int) ([]Adoption, error)
+	FindMaxID() (int, error)
 }
