@@ -36,6 +36,7 @@ func (db *DbAdoptionRepo) FindByID(id int) (domain.Adoption, error) {
 	}
 	defer row.Close()
 
+	row.Next()
 	var adopterID, animalID int
 	err = row.Scan(&adopterID, &animalID)
 	if err != nil {
